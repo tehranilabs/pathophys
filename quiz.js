@@ -125,7 +125,6 @@ const questionText = document.getElementById('questionText');
 const answersContainer = document.getElementById('answersContainer');
 const feedback = document.getElementById('feedback');
 const nextButton = document.getElementById('nextButton');
-const restartButton = document.getElementById('restartButton');
 const retryButton = document.getElementById('retryButton');
 const currentQuestionElement = document.getElementById('currentQuestion');
 const totalQuestionsElement = document.getElementById('totalQuestions');
@@ -237,10 +236,15 @@ function showFeedback(isCorrect, explanation) {
     feedback.classList.remove('hidden', 'correct', 'incorrect');
     feedback.classList.add(isCorrect ? 'correct' : 'incorrect');
     
-    feedback.innerHTML = `
-        <h3>${isCorrect ? '✓ Correct!' : '✗ Incorrect'}</h3>
-        <p>${explanation}</p>
-    `;
+    const feedbackTitle = document.createElement('h3');
+    feedbackTitle.textContent = isCorrect ? '✓ Correct!' : '✗ Incorrect';
+    
+    const feedbackText = document.createElement('p');
+    feedbackText.textContent = explanation;
+    
+    feedback.innerHTML = '';
+    feedback.appendChild(feedbackTitle);
+    feedback.appendChild(feedbackText);
 }
 
 // Next Question
@@ -284,7 +288,6 @@ function restartQuiz() {
 
 // Event Listeners
 nextButton.addEventListener('click', nextQuestion);
-restartButton.addEventListener('click', restartQuiz);
 if (retryButton) {
     retryButton.addEventListener('click', restartQuiz);
 }

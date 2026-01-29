@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathophysiology Case Studies - Midterm Review</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px 0; }
+        header h1 { font-size: 2.2em; background: linear-gradient(90deg, #00d4ff, #7b2cbf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        header p { color: #a0a0a0; }
+        .progress-bar { background: #2a2a4a; border-radius: 20px; height: 25px; margin: 20px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00d4ff, #7b2cbf); transition: width 0.5s; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85em; }
+        .stats { display: flex; justify-content: space-around; margin: 20px 0; flex-wrap: wrap; gap: 10px; }
+        .stat-box { background: #2a2a4a; padding: 15px 25px; border-radius: 10px; text-align: center; }
+        .stat-box .number { font-size: 1.8em; font-weight: bold; color: #00d4ff; }
+        .stat-box .label { font-size: 0.85em; color: #a0a0a0; }
+        .menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 30px 0; }
+        .menu-item { background: linear-gradient(145deg, #2a2a4a, #1a1a3a); padding: 20px; border-radius: 15px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .menu-item:hover { border-color: #00d4ff; transform: translateY(-3px); }
+        .menu-item h3 { color: #00d4ff; margin-bottom: 8px; font-size: 1.1em; }
+        .menu-item p { color: #a0a0a0; font-size: 0.9em; }
+        .menu-item .count { background: #7b2cbf; padding: 3px 10px; border-radius: 10px; font-size: 0.8em; display: inline-block; margin-top: 10px; }
+        .case-container { background: #2a2a4a; border-radius: 15px; padding: 25px; margin: 20px 0; display: none; }
+        .case-header { border-bottom: 2px solid #3a3a5a; padding-bottom: 15px; margin-bottom: 20px; }
+        .case-header h2 { color: #00d4ff; margin-bottom: 10px; }
+        .case-scenario { background: #1a1a3a; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #7b2cbf; }
+        .case-scenario h4 { color: #ff6b6b; margin-bottom: 10px; }
+        .question-box { background: #1a1a3a; padding: 20px; border-radius: 10px; margin: 15px 0; }
+        .question-box h4 { margin-bottom: 15px; line-height: 1.5; }
+        .question-num { color: #7b2cbf; font-size: 0.9em; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: #2a2a4a; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .option:hover { border-color: #00d4ff; }
+        .option.selected { border-color: #00d4ff; background: #3a3a5a; }
+        .option.correct { border-color: #4ade80; background: rgba(74, 222, 128, 0.2); }
+        .option.incorrect { border-color: #f87171; background: rgba(248, 113, 113, 0.2); }
+        .option.show-correct { border-color: #4ade80; background: rgba(74, 222, 128, 0.15); }
+        .feedback { padding: 20px; border-radius: 10px; margin: 15px 0; display: none; }
+        .feedback.correct { background: rgba(74, 222, 128, 0.15); border-left: 4px solid #4ade80; }
+        .feedback.incorrect { background: rgba(248, 113, 113, 0.15); border-left: 4px solid #f87171; }
+        .feedback h4 { margin-bottom: 10px; }
+        .feedback.correct h4 { color: #4ade80; }
+        .feedback.incorrect h4 { color: #f87171; }
+        .explanation { background: #1a1a3a; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .explanation h5 { color: #00d4ff; margin-bottom: 10px; }
+        .explanation ul { margin-left: 20px; }
+        .explanation li { margin: 8px 0; line-height: 1.5; }
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: bold; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(90deg, #00d4ff, #7b2cbf); color: #fff; }
+        .btn-primary:hover { transform: scale(1.05); }
+        .btn-secondary { background: #3a3a5a; color: #fff; }
+        .btn-secondary:hover { background: #4a4a6a; }
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .back-btn { position: fixed; top: 20px; left: 20px; background: #3a3a5a; border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; display: none; z-index: 100; }
+        .back-btn:hover { background: #4a4a6a; }
+        .multi-select-note { color: #fbbf24; font-size: 0.9em; margin-bottom: 10px; }
+        .checkbox { width: 18px; height: 18px; margin-right: 10px; vertical-align: middle; }
+        .key-point { background: #3a3a5a; padding: 10px 15px; border-radius: 8px; margin: 10px 0; border-left: 3px solid #fbbf24; }
+        .key-point strong { color: #fbbf24; }
+        @media (max-width: 600px) { header h1 { font-size: 1.6em; } .stats { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="showMenu()">Back to Menu</button>
+    <div class="container">
+        <header>
+            <h1>Pathophysiology Case Studies</h1>
+            <p>Interactive Midterm Exam Review - 75 Questions</p>
+        </header>
+
+        <div id="mainMenu">
+            <div class="progress-bar"><div class="progress-fill" id="totalProgress" style="width: 0%">0%</div></div>
+            <div class="stats">
+                <div class="stat-box"><div class="number" id="answeredCount">0</div><div class="label">Answered</div></div>
+                <div class="stat-box"><div class="number" id="correctCount">0</div><div class="label">Correct</div></div>
+                <div class="stat-box"><div class="number" id="scorePercent">0%</div><div class="label">Score</div></div>
+            </div>
+            <div class="menu" id="caseMenu"></div>
+        </div>
+
+        <div class="case-container" id="caseContainer"></div>
+    </div>
+
+<script>
+const gameData = {
+    answered: new Set(),
+    correct: new Set(),
+    cases: [
+        {
+            id: 1,
+            title: "Cellular Adaptation & Tissue Changes",
+            icon: "🔬",
+            description: "Atrophy, metaplasia, dysplasia, apoptosis, and neoplasia",
+            scenario: "You are working in a multi-specialty clinic seeing patients with various tissue adaptation responses to chronic conditions and environmental exposures.",
+            questions: [
+                {
+                    id: 72, num: "#1",
+                    question: "A client on prolonged bed rest exhibits significant muscle weakness and wasting. Which nursing intervention would be MOST effective in preventing further atrophy?",
+                    options: ["Assisting with active range of motion exercises", "Encouraging increased bed rest", "Providing a high-calorie diet", "Administering sedatives to promote sleep"],
+                    correct: 0,
+                    explanation: {
+                        title: "Disuse Atrophy",
+                        points: ["Atrophy is the DECREASE in cell size due to lack of use, nutrition, or stimulation", "Active ROM exercises maintain muscle tone and prevent further wasting", "Bed rest WORSENS atrophy - muscles need stimulation to maintain mass", "Diet alone won't prevent atrophy without muscle activation", "Sedatives would increase immobility and worsen the problem"],
+                        keyPoint: "Remember: USE IT OR LOSE IT - muscles require active stimulation to maintain size and function."
+                    }
+                },
+                {
+                    id: 71, num: "#2",
+                    question: "A 50-year-old with GERD for 3 years has an endoscopy showing histological changes. Why would metaplasia be seen?",
+                    options: ["Metaplasia results from chronic stomach acid irritation", "Metaplasia is a sign that cancer is going to occur", "Metaplasia would occur after even one time having GERD", "Metaplasia is a sign for abnormal tissue growth"],
+                    correct: 0,
+                    explanation: {
+                        title: "Metaplasia as Adaptive Response",
+                        points: ["Metaplasia is the REVERSIBLE replacement of one mature cell type with another", "In GERD, chronic acid exposure causes esophageal squamous cells to become columnar (Barrett's esophagus)", "This is an ADAPTATION to protect against continued irritation", "While metaplasia can progress to dysplasia/cancer, it's not inevitable", "Requires CHRONIC exposure, not a single episode"],
+                        keyPoint: "Metaplasia = cells adapting to stress by changing type. It's reversible if the stressor is removed!"
+                    }
+                },
+                {
+                    id: 70, num: "#3",
+                    question: "A client with chronic ulcerative colitis has a colonoscopy revealing dysplasia. What is the nurse's understanding of dysplasia?",
+                    options: ["It suggests abnormal cell growth with potential for malignancy", "It indicates the presence of cancerous cells", "It is a benign condition requiring no further intervention", "It signifies inflammation of the colon"],
+                    correct: 0,
+                    explanation: {
+                        title: "Dysplasia - Pre-malignant Changes",
+                        points: ["Dysplasia = DISORGANIZED cell growth with abnormal size, shape, and organization", "It is a PRE-CANCEROUS condition, not cancer itself", "Chronic inflammation (like UC) increases dysplasia risk", "Requires monitoring and possible intervention", "Can progress to carcinoma if left untreated"],
+                        keyPoint: "Dysplasia is the 'warning sign' - abnormal but not yet cancer. Think: Dis (bad) + plasia (growth)."
+                    }
+                },
+                {
+                    id: 15, num: "#4",
+                    question: "Neoplasia could result if cells fail to undergo which regulated process?",
+                    options: ["Apoptosis", "Proliferation", "Hypoxia", "Necrosis"],
+                    correct: 0,
+                    explanation: {
+                        title: "Apoptosis - Programmed Cell Death",
+                        points: ["Apoptosis is PROGRAMMED cell death - a controlled, orderly process", "It eliminates damaged, old, or potentially dangerous cells", "When apoptosis fails, damaged cells continue to divide = NEOPLASIA", "Necrosis is UNCONTROLLED cell death from injury", "Proliferation is cell division - we need this, just controlled"],
+                        keyPoint: "Apoptosis is the body's 'quality control' - when it fails, abnormal cells survive and multiply into tumors."
+                    }
+                },
+                {
+                    id: 69, num: "#5",
+                    question: "A client with chronic cigarette smoke exposure develops squamous metaplasia in respiratory epithelium. What is the primary rationale?",
+                    options: ["Increasing tolerance to toxins in cigarette smoke", "Disorganized, uncoordinated, uncontrolled proliferative cell growth", "Protecting against infections", "Decreasing inflammatory response"],
+                    correct: 0,
+                    explanation: {
+                        title: "Protective Metaplasia in Smokers",
+                        points: ["Normal respiratory epithelium is ciliated columnar (delicate, has cilia)", "Smoke irritation causes change to squamous epithelium (tougher, no cilia)", "This is an ADAPTIVE response to chronic irritation", "Squamous cells are more resistant to smoke damage", "Trade-off: loses mucociliary clearance, increasing infection risk"],
+                        keyPoint: "The lungs sacrifice function (cilia) for protection (tougher cells). This is adaptation, not yet dysplasia!"
+                    }
+                },
+                {
+                    id: 3, num: "#39",
+                    question: "A client with chronic cholecystitis develops intestinal metaplasia in the gallbladder mucosa. What complication is the client at risk for?",
+                    options: ["Gallbladder cancer", "Gallstone formation", "Biliary obstruction", "Cholecystitis"],
+                    correct: 0,
+                    explanation: {
+                        title: "Metaplasia to Cancer Progression",
+                        points: ["Chronic inflammation leads to metaplasia as an adaptive response", "Metaplasia can progress: Metaplasia → Dysplasia → Carcinoma", "Intestinal metaplasia in the gallbladder increases cancer risk", "The client already has cholecystitis (that caused the metaplasia)", "Gallstones and obstruction are separate pathologies"],
+                        keyPoint: "Sequence to remember: Normal → Metaplasia → Dysplasia → Carcinoma (Cancer). Each step increases risk!"
+                    }
+                }
+            ]
+        },
+        {
+            id: 2,
+            title: "Genetic Disorders",
+            icon: "🧬",
+            description: "Sickle cell, cystic fibrosis, Huntington's, Down syndrome, Tay-Sachs",
+            scenario: "You're rotating through a genetics clinic seeing patients with inherited disorders affecting multiple organ systems.",
+            questions: [
+                {
+                    id: 1, num: "#70",
+                    question: "Which of the following is true regarding sickle cell anemia?",
+                    options: ["The homozygous form is more severe", "Only one parent must be a carrier of the gene", "Sickle cell anemia is not a genetic disorder", "Only one parent must have sickle cell anemia to pass it on"],
+                    correct: 0,
+                    explanation: {
+                        title: "Sickle Cell Anemia Genetics",
+                        points: ["Sickle cell is AUTOSOMAL RECESSIVE - need 2 copies for disease", "Homozygous (HbSS) = severe disease with sickling crises", "Heterozygous (HbAS) = sickle cell TRAIT - usually asymptomatic", "BOTH parents must be carriers for child to have disease", "Trait carriers have some protection against malaria"],
+                        keyPoint: "HbSS (homozygous) = Disease. HbAS (heterozygous) = Trait. Both parents must contribute the gene!"
+                    }
+                },
+                {
+                    id: 8, num: "#7",
+                    question: "Which are important treatments for clients with cystic fibrosis? (Select all that apply)",
+                    options: ["Chest physiotherapy and airway clearance techniques", "Corticosteroid inhalers to reduce inflammation", "Bronchodilator therapy to improve airway patency", "Low fat dietary intake to prevent weight gain"],
+                    correct: [0, 1, 2],
+                    multiSelect: true,
+                    explanation: {
+                        title: "Cystic Fibrosis Management",
+                        points: ["CF causes THICK, STICKY mucus in lungs and digestive system", "Chest physiotherapy helps clear thick secretions - ESSENTIAL", "Corticosteroids reduce airway inflammation", "Bronchodilators open airways for better clearance", "CF patients need HIGH-FAT, HIGH-CALORIE diets due to malabsorption", "Pancreatic enzymes needed for nutrient absorption"],
+                        keyPoint: "CF = thick mucus everywhere. Treatment focuses on clearance + nutrition. They need MORE calories, not fewer!"
+                    }
+                },
+                {
+                    id: 17, num: "#9",
+                    question: "What are typical symptoms of Huntington's Disease and how do they progress?",
+                    options: ["Chorea and involuntary movements, followed by behavioral changes", "Muscle weakness and atrophy, followed by seizures", "Cognitive decline and memory loss, followed by motor dysfunction", "Speech difficulties and swallowing problems, followed by sensory loss"],
+                    correct: 0,
+                    explanation: {
+                        title: "Huntington's Disease Progression",
+                        points: ["Huntington's is AUTOSOMAL DOMINANT - only need 1 copy", "Caused by CAG repeat expansion on chromosome 4", "CHOREA (involuntary dance-like movements) is the hallmark early sign", "Progresses to behavioral/psychiatric changes, then dementia", "Usually onset age 30-50, fatal within 15-20 years"],
+                        keyPoint: "Remember: Huntington's HUNTS you down with CHOREographed movements (chorea). Movement problems come FIRST!"
+                    }
+                },
+                {
+                    id: 67, num: "#8",
+                    question: "A newborn presents with characteristic facial features, hypotonia, and a single palmar crease. What test confirms Down Syndrome?",
+                    options: ["Karyotyping", "Chromosomal microarray analysis", "Fluorescence in situ hybridization (FISH)", "Polymerase chain reaction (PCR)"],
+                    correct: 0,
+                    explanation: {
+                        title: "Down Syndrome Diagnosis",
+                        points: ["Down Syndrome = Trisomy 21 (three copies of chromosome 21)", "Karyotyping shows the complete chromosome picture - GOLD STANDARD", "Can visualize all 47 chromosomes and confirm extra 21", "FISH is faster but only looks at specific chromosomes", "Features: hypotonia, simian crease, epicanthal folds, flat nasal bridge"],
+                        keyPoint: "Karyotype = complete chromosome photo. It's the definitive test for chromosomal abnormalities like trisomies."
+                    }
+                },
+                {
+                    id: 68, num: "#6",
+                    question: "An 18-month-old presents with decline since 6 months, relentless mental/physical deterioration, will become blind, paralyzed, and it is fatal. Diagnosis?",
+                    options: ["Tay-Sachs", "Huntington's disease", "Cystic Fibrosis", "Down Syndrome"],
+                    correct: 0,
+                    explanation: {
+                        title: "Tay-Sachs Disease",
+                        points: ["Tay-Sachs = deficiency of hexosaminidase A enzyme", "GM2 ganglioside accumulates in neurons, destroying them", "Normal at birth, symptoms begin around 6 months", "Progressive: blindness, paralysis, seizures, death by age 4-5", "Autosomal recessive, more common in Ashkenazi Jewish population", "Cherry-red spot on macula is classic finding"],
+                        keyPoint: "Tay-Sachs: Normal baby → decline at 6 months → death by 5 years. No treatment. Cherry-red macula spot!"
+                    }
+                }
+            ]
+        },
+        {
+            id: 3,
+            title: "Inflammation & Infection",
+            icon: "🦠",
+            description: "Signs of inflammation, wound healing, bacterial and viral infections",
+            scenario: "You're working in urgent care seeing patients with various infectious and inflammatory conditions.",
+            questions: [
+                {
+                    id: 74, num: "#10",
+                    question: "Which classic signs indicate an inflammatory process at the site?",
+                    options: ["Swelling, redness, and heat", "Pallor and diaphoresis", "Increased heart rate and blood pressure", "Nausea and vomiting"],
+                    correct: 0,
+                    explanation: {
+                        title: "Cardinal Signs of Inflammation",
+                        points: ["The 5 cardinal signs: Rubor (redness), Calor (heat), Tumor (swelling), Dolor (pain), Functio laesa (loss of function)", "Redness & heat = increased blood flow (vasodilation)", "Swelling = fluid leaking from permeable vessels", "These are LOCAL signs at the injury site", "Systemic signs (HR, BP, fever) are separate responses"],
+                        keyPoint: "Remember: Red, Hot, Swollen, Painful, Can't use it. These are the 5 cardinal signs of LOCAL inflammation!"
+                    }
+                },
+                {
+                    id: 5, num: "#17",
+                    question: "Which of the following is a phase of acute inflammation?",
+                    options: ["Vascular permeability", "Chronic fibrosis", "Cellular exudation", "Vasoconstriction"],
+                    correct: 0,
+                    explanation: {
+                        title: "Phases of Acute Inflammation",
+                        points: ["Acute inflammation phases: 1) Vascular (permeability increases), 2) Cellular (WBCs migrate)", "Vascular permeability allows plasma proteins and fluid to exit vessels", "This causes the characteristic swelling (edema)", "Chronic fibrosis is a CHRONIC inflammation feature", "Initial brief vasoconstriction occurs, then VASODILATION predominates"],
+                        keyPoint: "Acute inflammation = vessels become leaky (permeability) → fluid exits → swelling. Then cells arrive to fight!"
+                    }
+                },
+                {
+                    id: 24, num: "#71",
+                    question: "What is the purpose of chemotaxis during the inflammatory response?",
+                    options: ["To promote leukocyte migration to the site of injury", "To increase vascular permeability", "To dilate blood vessels", "To inhibit the release of inflammatory mediators"],
+                    correct: 0,
+                    explanation: {
+                        title: "Chemotaxis - Directing the Troops",
+                        points: ["Chemotaxis = chemical signals directing cell MOVEMENT", "Injured tissues release chemicals that attract WBCs", "Leukocytes follow the chemical gradient to the injury", "Like a 'trail of breadcrumbs' leading immune cells to battle", "Different chemicals attract different cell types"],
+                        keyPoint: "Chemo (chemical) + taxis (movement) = chemicals guiding white blood cells TO the problem area!"
+                    }
+                },
+                {
+                    id: 14, num: "#18",
+                    question: "Which is correctly ordered for the four stages of wound healing?",
+                    options: ["Hemostasis, Inflammation, Proliferation, Wound contraction and remodeling", "Inflammation, Proliferation, Hemostasis, Wound contraction and remodeling", "Wound contraction and remodeling, Inflammation, Proliferation, Hemostasis", "Proliferation, Inflammation, Hemostasis, Wound contraction and remodeling"],
+                    correct: 0,
+                    explanation: {
+                        title: "Wound Healing Phases",
+                        points: ["1. HEMOSTASIS: Stop the bleeding (clot formation) - immediate", "2. INFLAMMATION: Clean up debris, fight infection (days 1-4)", "3. PROLIFERATION: Build new tissue, granulation (days 4-21)", "4. REMODELING: Strengthen and reorganize scar (weeks to years)", "Each phase must complete before the next can succeed"],
+                        keyPoint: "H-I-P-R: Hemostasis → Inflammation → Proliferation → Remodeling. Stop bleeding first, then clean, build, strengthen!"
+                    }
+                },
+                {
+                    id: 16, num: "#29",
+                    question: "A client with peripheral neuropathy has a heel pressure ulcer covered 100% by eschar. Next action?",
+                    options: ["Debridement to promote re-epithelialization and new tissue growth", "Examination for fragments from traumatic injury", "Immediate sterile dressings and surgical evaluation", "Consult cosmetic surgery for hyperplasic scar prevention"],
+                    correct: 0,
+                    explanation: {
+                        title: "Eschar and Wound Healing",
+                        points: ["Eschar = dead, necrotic tissue covering a wound", "Eschar PREVENTS wound healing by blocking granulation", "Debridement removes dead tissue to allow healing", "This is a PRESSURE ulcer, not trauma - no debris expected", "Peripheral neuropathy means patient may not feel the wound"],
+                        keyPoint: "Eschar must be removed (debrided) for wounds to heal. Dead tissue = barrier to new tissue growth!"
+                    }
+                },
+                {
+                    id: 53, num: "#30",
+                    question: "Which statement best describes wound dehiscence?",
+                    options: ["The separation of wound layers due to compromised surgical closure", "The process of wound healing with granulation tissue formation", "A normal inflammatory response during early healing", "Rapid wound closure using sutures or staples"],
+                    correct: 0,
+                    explanation: {
+                        title: "Wound Dehiscence",
+                        points: ["Dehiscence = wound edges SEPARATE after closure", "Partial: skin separates. Complete: all layers including fascia", "Risk factors: obesity, infection, poor nutrition, coughing/straining", "Evisceration = organs protrude through dehisced wound (emergency!)", "Post-surgical complication, not part of normal healing"],
+                        keyPoint: "Dehiscence = wound falling apart. Risk increases with poor nutrition, infection, and strain on the wound!"
+                    }
+                },
+                {
+                    id: 54, num: "#28",
+                    question: "Which statement best describes secondary intention wound healing?",
+                    options: ["Healing occurs when wound edges are not closely approximated, with gradual tissue repair and scar formation", "Wound edges are closely approximated with minimal scarring", "Rapid healing characterized by granulation tissue formation", "Wound heals without external intervention using natural processes"],
+                    correct: 0,
+                    explanation: {
+                        title: "Primary vs Secondary Intention",
+                        points: ["PRIMARY intention: edges approximated (stitched), minimal scar", "SECONDARY intention: edges NOT approximated, heals from bottom up", "Secondary = more granulation tissue, larger scar, longer healing", "Examples: pressure ulcers, abscesses, wounds left open", "TERTIARY: delayed primary closure (initially open, later closed)"],
+                        keyPoint: "Primary = edges together, small scar. Secondary = gap fills in from bottom, bigger scar. Think of a paper cut vs a crater!"
+                    }
+                },
+                {
+                    id: 55, num: "#27",
+                    question: "A client has increased muscle tone, difficulty relaxing masseter muscles, generalized spasms, and a recent puncture wound. Suspected cause?",
+                    options: ["Infection by Clostridium tetani", "Infection by Clostridium botulinum", "Infection by Corynebacterium diphtheriae", "Infection by Campylobacter jejuni"],
+                    correct: 0,
+                    explanation: {
+                        title: "Tetanus (Lockjaw)",
+                        points: ["C. tetani enters through puncture wounds (dirty, deep)", "Produces tetanospasmin toxin → BLOCKS inhibitory neurotransmitters", "Results in UNCONTROLLED muscle contraction/spasms", "Lockjaw (trismus) = inability to open mouth - classic sign", "C. botulinum does OPPOSITE - causes FLACCID paralysis"],
+                        keyPoint: "TETanus = TETanic spasms (rigid). BOTulism = BOTtom drops out (flaccid/floppy). Opposite effects!"
+                    }
+                },
+                {
+                    id: 57, num: "#25",
+                    question: "This microorganism produces a toxin that prevents muscle contraction, causing paralysis:",
+                    options: ["Clostridium botulinum", "Clostridium tetani", "Clostridium difficile", "Clostridium perfringens"],
+                    correct: 0,
+                    explanation: {
+                        title: "Botulism - Flaccid Paralysis",
+                        points: ["C. botulinum produces botulinum toxin (most potent toxin known)", "BLOCKS acetylcholine release → muscles CAN'T contract", "Results in descending FLACCID (floppy) paralysis", "Sources: improperly canned foods, honey (infants), wound botulism", "Medical use: Botox injections for cosmetic/therapeutic purposes"],
+                        keyPoint: "Botulism = floppy paralysis (can't contract). Tetanus = rigid spasms (can't relax). Know the difference!"
+                    }
+                },
+                {
+                    id: 58, num: "#24",
+                    question: "Which bacterial strain is found in the acronyms MRSA and VRSA?",
+                    options: ["Staphylococcus aureus", "Staphylococcus hemolyticus", "Staphylococcus epidermidis", "Staphylococcus saprophyticus"],
+                    correct: 0,
+                    explanation: {
+                        title: "Antibiotic-Resistant Staph",
+                        points: ["MRSA = Methicillin-Resistant Staphylococcus AUREUS", "VRSA = Vancomycin-Resistant Staphylococcus AUREUS", "S. aureus is the most pathogenic staphylococcus species", "Causes skin infections, pneumonia, endocarditis, sepsis", "Resistance makes these infections difficult to treat"],
+                        keyPoint: "S. aureus = 'golden staph' = major pathogen. MRSA/VRSA are drug-resistant versions requiring special antibiotics!"
+                    }
+                },
+                {
+                    id: 52, num: "#31",
+                    question: "What virus causes infectious mononucleosis (mono)?",
+                    options: ["Epstein-Barr Virus", "Herpes Simplex Virus 1", "Influenza Virus", "Varicella Zoster"],
+                    correct: 0,
+                    explanation: {
+                        title: "Infectious Mononucleosis",
+                        points: ["EBV (Epstein-Barr Virus) causes mono - the 'kissing disease'", "Transmitted through saliva, common in teens/young adults", "Symptoms: fatigue, fever, pharyngitis, lymphadenopathy", "Causes atypical lymphocytes on blood smear", "EBV also linked to Burkitt lymphoma and Hodgkin lymphoma"],
+                        keyPoint: "EBV = mono = kissing disease. Remember: EBV is also linked to certain lymphomas (appears again in cancer questions)!"
+                    }
+                },
+                {
+                    id: 73, num: "#66",
+                    question: "For which disease is antibiotics an appropriate first-line therapy?",
+                    options: ["Bacterial meningitis", "Candidiasis", "Malaria", "Herpes Simplex"],
+                    correct: 0,
+                    explanation: {
+                        title: "Antibiotic Indications",
+                        points: ["Antibiotics ONLY work against BACTERIA", "Bacterial meningitis = bacterial infection → needs antibiotics STAT", "Candidiasis = FUNGAL → needs antifungals", "Malaria = PARASITIC → needs antiparasitics", "Herpes = VIRAL → needs antivirals"],
+                        keyPoint: "Antibiotics = anti-BACTERIA only! Fungi, viruses, and parasites need different drug classes."
+                    }
+                },
+                {
+                    id: 56, num: "#26",
+                    question: "Which term is matched INCORRECTLY?",
+                    options: ["Sign - the subjective feelings a patient may describe", "Prognosis - the expected outcome of the disease", "Etiology - the study of the cause of the disease", "Disease - deviation from normal state of health"],
+                    correct: 0,
+                    explanation: {
+                        title: "Medical Terminology",
+                        points: ["SIGN = OBJECTIVE finding (observed/measured by clinician)", "SYMPTOM = SUBJECTIVE feeling (reported by patient)", "The question reverses these - that's the incorrect match", "Prognosis, etiology, and disease definitions are correct", "Remember: Signs are SEEN, Symptoms are SAID"],
+                        keyPoint: "Signs = See (objective, measurable). Symptoms = Say (subjective, patient reports). Classic exam trick!"
+                    }
+                }
+            ]
+        },
+        {
+            id: 4,
+            title: "Immune Response & Hypersensitivity",
+            icon: "🛡️",
+            description: "Hypersensitivity types I-IV, immunoglobulins, immune deficiency, SLE",
+            scenario: "You're working in an allergy and immunology clinic evaluating patients with various immune-mediated conditions.",
+            questions: [
+                {
+                    id: 62, num: "#19",
+                    question: "Which cell is the main contributor to histamine release during inflammation?",
+                    options: ["Mast cells", "Neutrophils", "Platelets", "Eosinophils"],
+                    correct: 0,
+                    explanation: {
+                        title: "Mast Cells and Histamine",
+                        points: ["Mast cells are LOADED with histamine granules", "When triggered, they degranulate releasing histamine", "Histamine causes vasodilation, increased permeability, itching", "Mast cells are key players in Type I hypersensitivity (allergies)", "Basophils also contain histamine but mast cells are PRIMARY source in tissues"],
+                        keyPoint: "Mast cells = histamine factories in tissues. Trigger = allergic reaction. Result = vasodilation, swelling, itching!"
+                    }
+                },
+                {
+                    id: 25, num: "#69",
+                    question: "Which substance is primarily responsible for inducing fever during immune response?",
+                    options: ["Pyrogens", "Histamine", "Thyroxine", "Progesterone"],
+                    correct: 0,
+                    explanation: {
+                        title: "Pyrogens and Fever",
+                        points: ["Pyrogens = fever-producing substances", "Exogenous pyrogens: bacterial components (endotoxins)", "Endogenous pyrogens: IL-1, IL-6, TNF from immune cells", "They act on hypothalamus to raise temperature set point", "Fever helps fight infection by enhancing immune function"],
+                        keyPoint: "Pyro = fire. Pyrogens = fire-makers = fever-causing substances. They reset the hypothalamic thermostat higher!"
+                    }
+                },
+                {
+                    id: 51, num: "#32",
+                    question: "Which immunoglobulin class is responsible for immediate hypersensitivity (allergic) reactions?",
+                    options: ["IgE", "IgA", "IgG", "IgD"],
+                    correct: 0,
+                    explanation: {
+                        title: "IgE and Allergies",
+                        points: ["IgE = the ALLERGY antibody", "Binds to mast cells and basophils", "When allergen cross-links IgE → mast cell degranulation → histamine release", "Responsible for Type I hypersensitivity (anaphylaxis, hay fever, asthma)", "IgG = most abundant, crosses placenta. IgA = mucosal immunity"],
+                        keyPoint: "IgE = allErgies! It arms mast cells to release histamine when allergen appears. Think: E for Emergency (anaphylaxis)!"
+                    }
+                },
+                {
+                    id: 22, num: "#73",
+                    question: "A client with hay fever has seasonal allergies. Which cells play a central role in allergic reactions?",
+                    options: ["Mast cells", "T cells", "B cells", "Macrophages"],
+                    correct: 0,
+                    explanation: {
+                        title: "Type I Hypersensitivity Mechanism",
+                        points: ["Hay fever = Type I (immediate) hypersensitivity", "Mast cells coated with IgE are the effector cells", "Allergen binds → mast cells degranulate → histamine, leukotrienes", "Causes sneezing, runny nose, watery eyes within minutes", "B cells make the IgE, but mast cells cause the symptoms"],
+                        keyPoint: "Mast cells are pre-loaded weapons. IgE is the trigger. Allergen pulls the trigger = immediate allergic symptoms!"
+                    }
+                },
+                {
+                    id: 19, num: "#34",
+                    question: "Which hypersensitivity type is caused by blood transfusion reactions involving RBC destruction by antibodies?",
+                    options: ["Type II: Cytotoxic Hypersensitivity", "Type I: Immediate Hypersensitivity", "Type III: Immune Complex Hypersensitivity", "Type IV: Delayed Hypersensitivity"],
+                    correct: 0,
+                    explanation: {
+                        title: "Type II Hypersensitivity",
+                        points: ["Type II = antibodies target CELL SURFACE antigens", "Antibodies (IgG/IgM) bind to cells → destruction", "Examples: transfusion reactions, hemolytic disease of newborn, autoimmune hemolytic anemia", "Complement activation and phagocytosis destroy the cells", "Key: antibody attacks a SPECIFIC CELL type"],
+                        keyPoint: "Type II = antibody vs CELL. Transfusion reaction = your antibodies attack donor RBCs. Cell-specific destruction!"
+                    }
+                },
+                {
+                    id: 50, num: "#33",
+                    question: "A client with SLE presents with fever, joint pain, and butterfly rash. Labs show elevated ANA and anti-dsDNA. Mechanism?",
+                    options: ["Type III: Immune Complex Hypersensitivity", "Type I: Immediate Hypersensitivity", "Type II: Cytotoxic Hypersensitivity", "Type IV: Delayed Hypersensitivity"],
+                    correct: 0,
+                    explanation: {
+                        title: "SLE and Type III Hypersensitivity",
+                        points: ["SLE = Systemic Lupus Erythematosus - autoimmune disease", "Type III = IMMUNE COMPLEX deposition", "Antibody-antigen complexes deposit in tissues (kidneys, joints, skin)", "Causes inflammation wherever complexes lodge", "Butterfly rash, arthritis, nephritis are classic SLE features"],
+                        keyPoint: "Type III = immune COMPLEXES floating around, getting stuck in tissues. SLE antibodies form complexes that deposit everywhere!"
+                    }
+                },
+                {
+                    id: 75, num: "#36",
+                    question: "A female presents with stiff painful joints, high blood pressure, and a red rash across cheeks and nose. Likely diagnosis?",
+                    options: ["Systemic lupus erythematosus", "Rheumatoid Arthritis", "Osteoarthritis", "Acute lymphocytic leukemia"],
+                    correct: 0,
+                    explanation: {
+                        title: "SLE Clinical Features",
+                        points: ["BUTTERFLY (malar) RASH = highly specific for SLE", "SLE affects multiple organ systems: joints, skin, kidneys, heart", "More common in women (9:1 female to male ratio)", "Arthritis is inflammatory but NON-erosive (unlike RA)", "Hypertension often from kidney involvement (lupus nephritis)"],
+                        keyPoint: "Butterfly rash + joint pain + female = think SLE! Remember: SLE is the 'great imitator' affecting multiple systems."
+                    }
+                },
+                {
+                    id: 49, num: "#35",
+                    question: "A 2-year-old has recurrent respiratory infections including pneumonia and bronchitis, requiring frequent antibiotics. Most likely experiencing:",
+                    options: ["Selective IgA deficiency", "Severe combined immunodeficiency disease", "Chronic mucocutaneous candidiasis", "Hypogammaglobulinemia"],
+                    correct: 0,
+                    explanation: {
+                        title: "Selective IgA Deficiency",
+                        points: ["IgA = main antibody protecting mucosal surfaces (respiratory, GI)", "IgA deficiency = recurrent RESPIRATORY and GI infections", "Most common primary immunodeficiency", "Usually not as severe as SCID (which affects all immunity)", "Many patients are asymptomatic; some have recurrent infections"],
+                        keyPoint: "IgA protects mucous membranes. No IgA = respiratory and GI infections. SCID would be more severe with ALL types of infections!"
+                    }
+                }
+            ]
+        },
+        {
+            id: 5,
+            title: "Cardiac Disorders - Part 1",
+            icon: "❤️",
+            description: "MI, angina, cardiac events, CABG, stress testing",
+            scenario: "You're working in a cardiology unit caring for patients with coronary artery disease and acute coronary syndromes.",
+            questions: [
+                {
+                    id: 64, num: "#15",
+                    question: "What term describes the MOST serious type of coronary event?",
+                    options: ["Myocardial infarction", "Myocardial ischemia", "Myocardial apoptosis", "Tachycardia"],
+                    correct: 0,
+                    explanation: {
+                        title: "Spectrum of Coronary Events",
+                        points: ["Ischemia = reversible reduced blood flow, no cell death", "Angina = chest pain from ischemia (still reversible)", "INFARCTION = actual DEATH of heart muscle (irreversible)", "MI is an emergency - 'time is muscle'", "Tachycardia is fast heart rate, not a coronary event"],
+                        keyPoint: "Ischemia → Injury → Infarction. Each step gets worse. MI = muscle death = most serious = IRREVERSIBLE!"
+                    }
+                },
+                {
+                    id: 2, num: "#12",
+                    question: "Which client is MOST at risk for experiencing a silent myocardial infarction?",
+                    options: ["A 70-year-old man with diabetes and hypertension", "A 30-year-old athlete with no cardiac history", "A 45-year-old smoker with sedentary lifestyle", "A 60-year-old woman with no underlying conditions"],
+                    correct: 0,
+                    explanation: {
+                        title: "Silent MI Risk Factors",
+                        points: ["Silent MI = heart attack without typical chest pain", "DIABETES causes neuropathy - patients don't feel the pain", "Elderly also have altered pain perception", "Up to 25% of MIs in diabetics are silent", "Other high-risk groups: elderly, women, post-transplant patients"],
+                        keyPoint: "Diabetic neuropathy = no pain signals! Diabetics can have MIs without knowing. Always consider MI with atypical symptoms!"
+                    }
+                },
+                {
+                    id: 61, num: "#20",
+                    question: "Which is a hallmark symptom of angina pectoris?",
+                    options: ["Chest pain relieved by rest or nitroglycerin", "Chest pain at rest", "Chest pain occurring unpredictably", "Chest pain that worsens with inspiration"],
+                    correct: 0,
+                    explanation: {
+                        title: "Stable Angina Characteristics",
+                        points: ["Stable angina = predictable chest pain with exertion", "Pain is RELIEVED by rest (decreased oxygen demand) or nitroglycerin (vasodilation)", "Unstable angina = pain at rest or unpredictable (more serious!)", "Pleuritic pain (worse with breathing) suggests pericarditis or pulmonary cause", "Nitroglycerin dilates coronary arteries, improving blood flow"],
+                        keyPoint: "Stable angina = predictable + relieved by rest/nitro. If pain occurs at REST or doesn't resolve = unstable = emergency!"
+                    }
+                },
+                {
+                    id: 66, num: "#11",
+                    question: "A client with suspected angina is scheduled for an exercise stress test. What is the rationale?",
+                    options: ["To evaluate coronary artery function during physical exertion", "To assess effectiveness of medication therapy", "To determine presence of aortic valve stenosis", "To diagnose COPD"],
+                    correct: 0,
+                    explanation: {
+                        title: "Exercise Stress Testing",
+                        points: ["Stress test increases oxygen DEMAND on the heart", "If coronary arteries are narrowed, they can't meet increased demand", "Results in ischemic changes on ECG or symptoms", "Helps diagnose coronary artery disease", "Can also use pharmacological stress if patient can't exercise"],
+                        keyPoint: "Stress test = make the heart work harder to expose hidden blockages. If arteries are narrowed, problems show up with exertion!"
+                    }
+                },
+                {
+                    id: 18, num: "#57",
+                    question: "A patient has suffered an MI. Which factor is expected to be elevated?",
+                    options: ["Cardiac troponin", "High-density lipoprotein", "Hematocrit", "Immunoglobulin A"],
+                    correct: 0,
+                    explanation: {
+                        title: "Cardiac Biomarkers",
+                        points: ["Troponin = MOST SPECIFIC marker for myocardial damage", "Released when cardiac cells die (infarction)", "Troponin I and T are highly specific to heart muscle", "Rises 3-6 hours after MI, peaks at 12-24 hours", "HDL is 'good' cholesterol - not a damage marker"],
+                        keyPoint: "Troponin = heart muscle death marker. If troponin is elevated, heart cells have died. The gold standard for MI diagnosis!"
+                    }
+                },
+                {
+                    id: 10, num: "#21",
+                    question: "What signs and symptoms are indicative of MI? (Select all that apply)",
+                    options: ["Severe, crushing chest pain", "Profuse sweating and diaphoresis", "Levine's sign", "Elevated blood pressure"],
+                    correct: [0, 1, 2],
+                    multiSelect: true,
+                    explanation: {
+                        title: "MI Presentation",
+                        points: ["Crushing substernal chest pain = classic MI symptom", "Diaphoresis (sweating) = sympathetic nervous system activation", "Levine's sign = clenched fist over chest describing the pain", "Blood pressure often DROPS (not elevated) due to pump failure", "Other symptoms: nausea, dyspnea, radiating arm/jaw pain"],
+                        keyPoint: "Classic MI: crushing chest pain + sweating + Levine's sign (fist to chest). BP typically falls, not rises!"
+                    }
+                },
+                {
+                    id: 9, num: "#13",
+                    question: "CABG surgery includes which of the following? (Select all that apply)",
+                    options: ["Creating new routes for blood flow around the occlusion", "Multiple bypasses can be done at one time", "Using a piece of the brachial artery in the graft", "Can be used to treat angina pectoris and MI"],
+                    correct: [0, 1, 3],
+                    multiSelect: true,
+                    explanation: {
+                        title: "Coronary Artery Bypass Grafting",
+                        points: ["CABG = bypass blocked coronary arteries with grafts", "Creates new routes AROUND (not through) blockages", "Can do multiple bypasses: 'double,' 'triple,' 'quadruple' bypass", "Grafts use: saphenous VEIN or internal mammary ARTERY", "BRACHIAL artery is NOT used (arm artery, not suitable)", "Treats severe angina and can be done after MI"],
+                        keyPoint: "CABG uses saphenous vein or internal mammary artery - NOT brachial. Bypasses go AROUND blockages!"
+                    }
+                }
+            ]
+        },
+        {
+            id: 6,
+            title: "Heart Failure & Cardiomyopathy",
+            icon: "💔",
+            description: "Left vs right heart failure, cor pulmonale, cardiomyopathy",
+            scenario: "You're managing patients in the heart failure unit, distinguishing between left and right-sided failure presentations.",
+            questions: [
+                {
+                    id: 4, num: "#37",
+                    question: "A client presents with left ventricular dysfunction. Which symptom is MOST indicative of left ventricular heart failure?",
+                    options: ["Crackles in the lungs", "Peripheral edema", "Jugular vein distention", "Decreased urinary output"],
+                    correct: 0,
+                    explanation: {
+                        title: "Left Heart Failure - Backward Effects",
+                        points: ["LEFT heart failure = blood backs up into LUNGS", "Pulmonary congestion causes CRACKLES (rales) on auscultation", "Also causes dyspnea, orthopnea, paroxysmal nocturnal dyspnea", "Peripheral edema and JVD are RIGHT heart failure signs", "Think: LEFT = LUNGS"],
+                        keyPoint: "LEFT heart failure = LUNG symptoms (crackles, dyspnea). RIGHT heart failure = systemic congestion (edema, JVD)!"
+                    }
+                },
+                {
+                    id: 60, num: "#22",
+                    question: "Which is a hallmark symptom of heart failure?",
+                    options: ["Orthopnea", "Hypertension", "Bradycardia", "Hyperglycemia"],
+                    correct: 0,
+                    explanation: {
+                        title: "Orthopnea in Heart Failure",
+                        points: ["Orthopnea = difficulty breathing when lying FLAT", "When supine, fluid redistributes to lungs (increased preload)", "Patients sleep propped up on pillows", "Measured as '2-pillow' or '3-pillow' orthopnea", "Also see PND (paroxysmal nocturnal dyspnea) - waking up gasping"],
+                        keyPoint: "Orthopnea = can't breathe lying down = classic heart failure! Ask: 'How many pillows do you sleep with?'"
+                    }
+                },
+                {
+                    id: 59, num: "#23",
+                    question: "How does heart failure differ from myocardial infarction?",
+                    options: ["Heart failure is chronic with inability to pump effectively; MI is acute from atherosclerotic plaque rupture", "Heart failure results from insufficient blood supply; MI from sudden blockage", "Heart failure is not reversible; MI is reversible with treatment", "Heart failure affects coronary arteries; MI affects electrical conduction"],
+                    correct: 0,
+                    explanation: {
+                        title: "Heart Failure vs MI",
+                        points: ["Heart failure = CHRONIC condition, heart can't meet body's demands", "MI = ACUTE event from sudden coronary artery blockage", "MI can CAUSE heart failure (damaged muscle can't pump)", "Heart failure can be managed but often not 'cured'", "MI requires immediate intervention; HF requires chronic management"],
+                        keyPoint: "HF = pump failure (chronic). MI = heart attack (acute). MI can lead to HF if enough muscle dies!"
+                    }
+                },
+                {
+                    id: 48, num: "#38",
+                    question: "What is the classic sign of right ventricular failure caused by venous congestion?",
+                    options: ["Jugular venous distension", "Cyanosis", "Cough", "Crackles on auscultation"],
+                    correct: 0,
+                    explanation: {
+                        title: "Right Heart Failure Signs",
+                        points: ["RIGHT heart failure = blood backs up into SYSTEMIC circulation", "JVD = backup into jugular veins in neck", "Also see peripheral edema, hepatomegaly, ascites", "Crackles and cough are LEFT heart failure signs", "Think: RIGHT = REST of body (not lungs)"],
+                        keyPoint: "Right heart failure = JVD + peripheral edema + hepatomegaly. Backup into the BODY, not lungs!"
+                    }
+                },
+                {
+                    id: 40, num: "#50",
+                    question: "Which is a backward effect of right ventricular failure?",
+                    options: ["Ascites", "Paroxysmal nocturnal dyspnea", "Crackles on auscultation", "Pulmonary edema"],
+                    correct: 0,
+                    explanation: {
+                        title: "Right HF Backward Effects",
+                        points: ["BACKWARD effect = congestion BEHIND the failing chamber", "Right heart fails → blood backs up into systemic veins", "Ascites = fluid in peritoneal cavity from portal congestion", "Also hepatomegaly (enlarged liver), peripheral edema", "Pulmonary symptoms = LEFT heart backward effects"],
+                        keyPoint: "Right heart backward = systemic congestion = ascites, edema, hepatomegaly. Left backward = pulmonary congestion!"
+                    }
+                },
+                {
+                    id: 39, num: "#51",
+                    question: "Which disorder is caused by right-side heart failure due to pulmonary issues?",
+                    options: ["Cor Pulmonale", "Ischemic heart disease", "Atrial Fibrillation", "Hypertension"],
+                    correct: 0,
+                    explanation: {
+                        title: "Cor Pulmonale",
+                        points: ["Cor Pulmonale = right heart failure FROM lung disease", "Lung disease → pulmonary hypertension → right heart strain → failure", "Causes: COPD, pulmonary fibrosis, pulmonary embolism", "Heart is SECONDARY to the lung problem", "NOT caused by left heart failure (that's different mechanism)"],
+                        keyPoint: "Cor Pulmonale = heart (cor) problem from lung (pulmonale) disease. Lung disease strains the right heart!"
+                    }
+                },
+                {
+                    id: 41, num: "#49",
+                    question: "A 16-year-old athlete has signs of hypertrophic cardiomyopathy. How should this be described?",
+                    options: ["The cardiac muscle is enlarged", "The heart is increasing in number of cells", "The cardiac muscle is small but not an issue", "The heart muscle is too big and will give out at any time"],
+                    correct: 0,
+                    explanation: {
+                        title: "Hypertrophic Cardiomyopathy",
+                        points: ["HCM = heart muscle is abnormally THICK (hypertrophied)", "Often genetic, affects the septum especially", "Leading cause of sudden cardiac death in young athletes", "Thick muscle can obstruct blood flow out of heart", "Need screening before sports participation"],
+                        keyPoint: "HCM = thick heart muscle, genetic, can cause sudden death in athletes. Requires careful evaluation before sports clearance!"
+                    }
+                }
+            ]
+        },
+        {
+            id: 7,
+            title: "Dysrhythmias & Vascular Disorders",
+            icon: "⚡",
+            description: "Arrhythmias, DVT, venous insufficiency, fistula",
+            scenario: "You're caring for patients with cardiac rhythm disturbances and vascular complications.",
+            questions: [
+                {
+                    id: 21, num: "#74",
+                    question: "A student learning about cardiac manifestations comes across 'dysrhythmia.' This term describes:",
+                    options: ["An abnormal heart rhythm or irregular heartbeat", "An increase in blood pressure causing vascular damage", "A decreased heart rate leading to inadequate perfusion", "An inadequate oxygen supply to the myocardium"],
+                    correct: 0,
+                    explanation: {
+                        title: "Dysrhythmia Definition",
+                        points: ["Dysrhythmia (or arrhythmia) = abnormal heart rhythm", "Can be too fast, too slow, or irregular", "Dys- = abnormal, -rhythmia = rhythm", "Includes: AFib, VFib, bradycardia, tachycardia, heart blocks", "Different from ischemia (oxygen lack) or hypertension"],
+                        keyPoint: "Dysrhythmia = bad rhythm. Includes any abnormal heart rate or rhythm. Can be life-threatening depending on type!"
+                    }
+                },
+                {
+                    id: 65, num: "#14",
+                    question: "Ventricular fibrillation (VF) is characterized by:",
+                    options: ["Rapid and uncoordinated quivering of the ventricles", "Regular and coordinated contractions of the ventricles", "Absence of electrical activity in the heart", "Obesity and pregnancy weakening valve leaflets"],
+                    correct: 0,
+                    explanation: {
+                        title: "Ventricular Fibrillation",
+                        points: ["VF = ventricles QUIVER instead of contracting", "No effective cardiac output = clinical death", "Most common cause of sudden cardiac death", "Requires immediate defibrillation", "ECG shows chaotic, irregular waveforms with no QRS complexes"],
+                        keyPoint: "VF = chaotic quivering = NO blood pumping = DEATH without immediate defibrillation! This is the 'shockable' rhythm!"
+                    }
+                },
+                {
+                    id: 44, num: "#45",
+                    question: "A student is learning about DVT risk factors based on Virchow's Triad. Which is a primary risk factor?",
+                    options: ["Immobility or reduced mobility", "Bradycardia", "Hyperlipidemia", "Thrombocytopenia"],
+                    correct: 0,
+                    explanation: {
+                        title: "Virchow's Triad",
+                        points: ["Virchow's Triad = 3 factors causing thrombosis:", "1. STASIS (immobility, slow blood flow)", "2. ENDOTHELIAL INJURY (vessel wall damage)", "3. HYPERCOAGULABILITY (blood clots too easily)", "Immobility is a classic cause of stasis", "Thrombocytopenia = LOW platelets = LESS clotting risk"],
+                        keyPoint: "Virchow's Triad: Stasis + Injury + Hypercoagulability = clot formation. Immobility causes stasis!"
+                    }
+                },
+                {
+                    id: 43, num: "#46",
+                    question: "Which client is MOST at risk for DVT?",
+                    options: ["A 60-year-old morbidly obese patient who underwent hip replacement surgery", "A 25-year-old athlete with a fractured tibia", "A 35-year-old pregnant woman in second trimester with no complications", "A 52-year-old office worker who takes breaks to smoke and walk"],
+                    correct: 0,
+                    explanation: {
+                        title: "DVT Risk Assessment",
+                        points: ["This patient has MULTIPLE risk factors:", "- Obesity (hypercoagulability)", "- Age 60+ (increased risk)", "- Major surgery (endothelial injury)", "- Hip surgery specifically (very high DVT risk)", "- Post-op immobility (stasis)", "The other patients have fewer combined risk factors"],
+                        keyPoint: "DVT risk is cumulative. Surgery + obesity + age + immobility = very high risk! Hip/knee surgeries are especially risky!"
+                    }
+                },
+                {
+                    id: 27, num: "#65",
+                    question: "A varicosity is defined as:",
+                    options: ["An abnormally dilated superficial vein", "Thrombus due to blood stasis of venous blood", "Venous insufficiency due to vascular damage", "Narrowing of the vein due to hypercoagulability"],
+                    correct: 0,
+                    explanation: {
+                        title: "Varicose Veins",
+                        points: ["Varicosity = dilated, tortuous superficial vein", "Caused by incompetent valves → blood pools → vein expands", "Common in legs due to gravity and standing", "Risk factors: prolonged standing, obesity, pregnancy", "NOT a thrombus, though can predispose to superficial thrombophlebitis"],
+                        keyPoint: "Varicose veins = stretched out, bulging veins from valve failure. Blood pools and stretches the vein walls!"
+                    }
+                },
+                {
+                    id: 23, num: "#72",
+                    question: "A student learning about hemodialysis vascular access understands a fistula is:",
+                    options: ["A connection between two structures", "An inflexible shrinkage of a wound", "Abnormal bands of internal scar tissue limiting mobility", "A narrowing of an open area"],
+                    correct: 0,
+                    explanation: {
+                        title: "Arteriovenous Fistula",
+                        points: ["Fistula = abnormal CONNECTION between two structures", "AV fistula = surgical connection between artery and vein", "Used for hemodialysis access (high-flow needed)", "Artery blood flows directly into vein → vein enlarges", "Creates access point for dialysis needles"],
+                        keyPoint: "Fistula = connection. AV fistula for dialysis = artery connected to vein surgically. Feel for the 'thrill' (vibration)!"
+                    }
+                }
+            ]
+        },
+        {
+            id: 8,
+            title: "Hematologic Disorders",
+            icon: "🩸",
+            description: "Anemias, coagulation disorders, hemophilia, ITP",
+            scenario: "You're working in a hematology clinic evaluating patients with blood disorders.",
+            questions: [
+                {
+                    id: 30, num: "#61",
+                    question: "Anemia is defined as a condition characterized by:",
+                    options: ["Decreased hemoglobin (Hb) concentration", "Elevated red blood cell count", "Elevated hematocrit level", "Increased mean corpuscular volume"],
+                    correct: 0,
+                    explanation: {
+                        title: "Anemia Definition",
+                        points: ["Anemia = decreased oxygen-carrying capacity of blood", "Defined by LOW hemoglobin concentration", "Can also have low RBC count and low hematocrit", "MCV tells us SIZE of RBCs (microcytic, normocytic, macrocytic)", "Anemia = DECREASED values, not elevated"],
+                        keyPoint: "Anemia = low hemoglobin = reduced oxygen delivery. Check Hb first! Then determine the cause by looking at MCV and other indices."
+                    }
+                },
+                {
+                    id: 20, num: "#75",
+                    question: "The most common cause of anemia worldwide is:",
+                    options: ["Iron deficiency", "Vitamin B12 deficiency", "Folate deficiency", "Chronic disease"],
+                    correct: 0,
+                    explanation: {
+                        title: "Iron Deficiency Anemia",
+                        points: ["Iron deficiency = #1 cause of anemia GLOBALLY", "Causes: blood loss, poor intake, malabsorption, increased demand", "Results in MICROCYTIC, HYPOCHROMIC anemia", "Common in menstruating women, children, developing countries", "B12/folate deficiency cause MACROCYTIC anemia"],
+                        keyPoint: "Iron deficiency = most common anemia worldwide. Causes small, pale RBCs (microcytic, hypochromic)."
+                    }
+                },
+                {
+                    id: 29, num: "#62",
+                    question: "A client with iron deficiency anemia commonly presents with:",
+                    options: ["Hair loss and ice cravings", "Jaundice and ice cravings", "Flank pain and salt cravings", "Fatigue and sweet cravings"],
+                    correct: 0,
+                    explanation: {
+                        title: "Iron Deficiency Symptoms",
+                        points: ["PICA = craving non-food items (ice, dirt, starch)", "Pagophagia = specifically craving ICE - classic for iron deficiency", "Hair loss, brittle nails, koilonychia (spoon nails)", "Fatigue, pallor, dyspnea from decreased oxygen delivery", "Jaundice suggests hemolytic anemia, not iron deficiency"],
+                        keyPoint: "Ice craving (pagophagia) is specific for iron deficiency! Also look for: fatigue, pallor, brittle nails, hair loss."
+                    }
+                },
+                {
+                    id: 13, num: "#68",
+                    question: "Which interventions are commonly included in iron deficiency anemia treatment? (Select all that apply)",
+                    options: ["Intravenous iron supplementation", "Oral ferrous sulfate", "Vitamin C supplementation", "High-dose Vitamin B12 injections"],
+                    correct: [0, 1, 2],
+                    multiSelect: true,
+                    explanation: {
+                        title: "Iron Deficiency Treatment",
+                        points: ["Oral iron (ferrous sulfate) is first-line treatment", "IV iron for severe cases or malabsorption", "Vitamin C ENHANCES iron absorption", "Take iron on empty stomach with vitamin C (not with milk/antacids)", "B12 injections are for B12 deficiency, NOT iron deficiency"],
+                        keyPoint: "Iron + Vitamin C = better absorption! B12 is for a different type of anemia (macrocytic, not microcytic)."
+                    }
+                },
+                {
+                    id: 45, num: "#43",
+                    question: "What are concerns when hearing about a client with anemia?",
+                    options: ["May have hypotension due to low blood volume", "May appear more red/pink in color", "May be experiencing bradycardia and bradypnea", "May be at more risk for diabetes"],
+                    correct: 0,
+                    explanation: {
+                        title: "Anemia Complications",
+                        points: ["Severe anemia can cause hypotension (especially with blood loss)", "Patients appear PALE, not red/pink", "Body compensates with TACHYCARDIA and TACHYPNEA", "Heart works harder to deliver oxygen with fewer RBCs", "Anemia doesn't directly cause diabetes"],
+                        keyPoint: "Anemia = pale + fast heart rate + fast breathing. The body compensates by pumping faster to deliver more oxygen!"
+                    }
+                },
+                {
+                    id: 7, num: "#44",
+                    question: "A 23-year-old after MVA lost 30% blood. Which would be UNEXPECTED?",
+                    options: ["Normal hematocrit level of 48%", "Elevated heart rate of 125/min", "Decreased blood pressure of 96/60 mmHg", "Decreased urine output of 10 mL/hr"],
+                    correct: 0,
+                    explanation: {
+                        title: "Acute Blood Loss Response",
+                        points: ["30% blood loss = Class III hemorrhage (severe)", "EXPECTED: tachycardia, hypotension, decreased urine output", "Hematocrit should be LOW after blood loss", "UNEXPECTED: normal hematocrit right after acute loss", "Note: Hct may be normal initially before fluid shifts occur, then drops"],
+                        keyPoint: "After major blood loss, expect: fast HR, low BP, low urine output, and eventually low Hct. Normal Hct would be unexpected!"
+                    }
+                },
+                {
+                    id: 31, num: "#60",
+                    question: "Which statements are true about hemolytic anemia leading to erythroblastosis fetalis?",
+                    options: ["All of the above", "The antibody to Rh antigen can cross the placenta during pregnancy", "Antibody-antigen response due to mother's antibodies and newborn's RBC antigens", "Phototherapy is used to break down bilirubin in the newborn"],
+                    correct: 0,
+                    explanation: {
+                        title: "Erythroblastosis Fetalis (HDN)",
+                        points: ["Occurs when Rh- mother carries Rh+ fetus", "Mother's anti-Rh antibodies cross placenta and attack fetal RBCs", "Causes hemolysis → anemia → high bilirubin → jaundice", "Phototherapy breaks down bilirubin (unconjugated)", "Prevention: RhoGAM injection for Rh- mothers"],
+                        keyPoint: "Rh incompatibility: Mom Rh-, Baby Rh+ = mom's antibodies attack baby's RBCs. Prevent with RhoGAM!"
+                    }
+                },
+                {
+                    id: 6, num: "#63",
+                    question: "A prolonged prothrombin time (PT) may indicate dysfunction in which aspect of clotting?",
+                    options: ["Coagulation factors", "Wound healing", "Fibrinolysis", "Vascular integrity"],
+                    correct: 0,
+                    explanation: {
+                        title: "PT and Coagulation",
+                        points: ["PT measures EXTRINSIC and COMMON clotting pathways", "Tests factors I, II, V, VII, X (liver-produced factors)", "Prolonged PT = coagulation factor deficiency or dysfunction", "Used to monitor warfarin therapy (INR)", "PTT tests intrinsic pathway"],
+                        keyPoint: "PT = extrinsic pathway (factors VII, X, V, II, I). Prolonged PT = clotting factor problem. Used to monitor warfarin!"
+                    }
+                },
+                {
+                    id: 28, num: "#64",
+                    question: "A client with hemophilia may experience:",
+                    options: ["Prolonged bleeding time due to absence of a clotting factor", "Shortened bleeding time due to excessive factor VIII production", "Normal coagulation time with decreased platelet plug formation", "All of the above"],
+                    correct: 0,
+                    explanation: {
+                        title: "Hemophilia",
+                        points: ["Hemophilia = missing or deficient clotting factor", "Hemophilia A = Factor VIII deficiency (most common)", "Hemophilia B = Factor IX deficiency (Christmas disease)", "Results in prolonged bleeding, especially into joints/muscles", "X-linked recessive - primarily affects males"],
+                        keyPoint: "Hemophilia = missing clotting factor = prolonged bleeding. A = Factor 8, B = Factor 9. Affects males (X-linked)!"
+                    }
+                },
+                {
+                    id: 42, num: "#47",
+                    question: "A 6-year-old who had chickenpox now has bruising, purple spots, and gum bleeding. Diagnosis?",
+                    options: ["Immune Thrombocytopenic Purpura", "Hodgkin Lymphoma", "Hemolytic Uremic Syndrome", "Hemophilia"],
+                    correct: 0,
+                    explanation: {
+                        title: "ITP - Post-Viral",
+                        points: ["ITP = antibodies destroy platelets → low platelet count", "Often follows viral infection in children (1-3 weeks after)", "Presents with petechiae, purpura, bruising, mucosal bleeding", "Usually self-limiting in children", "Hemophilia is inherited factor deficiency, not post-viral"],
+                        keyPoint: "Post-viral + bruising + petechiae in a child = think ITP! Antibodies attack platelets after infection."
+                    }
+                }
+            ]
+        },
+        {
+            id: 9,
+            title: "Respiratory Disorders",
+            icon: "🫁",
+            description: "Pneumonia, asthma, COPD, bronchitis, pneumothorax, pleural effusion",
+            scenario: "You're working in a pulmonology clinic and emergency department seeing patients with respiratory complaints.",
+            questions: [
+                {
+                    id: 34, num: "#56",
+                    question: "Which organism most commonly causes community-acquired pneumonia in adults?",
+                    options: ["Streptococcus pneumoniae", "Haemophilus influenzae", "Klebsiella pneumoniae", "Staphylococcus aureus"],
+                    correct: 0,
+                    explanation: {
+                        title: "Community-Acquired Pneumonia",
+                        points: ["S. pneumoniae (pneumococcus) = #1 cause of CAP", "Gram-positive diplococci", "Causes lobar pneumonia with rust-colored sputum", "Prevented by pneumococcal vaccine", "Klebsiella more common in alcoholics; Staph in post-flu"],
+                        keyPoint: "Strep pneumo = most common CAP. Remember: 'Pneumo' is in both names! Rusty sputum is classic."
+                    }
+                },
+                {
+                    id: 37, num: "#53",
+                    question: "Which statement best describes pneumonia?",
+                    options: ["Infection and inflammation in the lungs, commonly caused by bacteria, viruses, or fungi", "Necrosis in bronchioles leading to increased mucus and cough", "Bacterial infiltration causing localized tissue necrosis", "A chronic obstructive disease with irreversible airflow limitation"],
+                    correct: 0,
+                    explanation: {
+                        title: "Pneumonia Definition",
+                        points: ["Pneumonia = lung INFECTION causing inflammation of alveoli", "Can be caused by bacteria, viruses, or fungi", "Alveoli fill with fluid/pus → impaired gas exchange", "Presents with fever, cough, dyspnea, crackles", "Different from COPD (chronic) or bronchitis (airways, not alveoli)"],
+                        keyPoint: "Pneumonia = infection in the lung tissue itself (alveoli fill with pus/fluid). Multiple possible causes!"
+                    }
+                },
+                {
+                    id: 38, num: "#52",
+                    question: "A student suspects they have acute bronchitis. Which symptoms are consistent with this?",
+                    options: ["Persistent cough, chest discomfort, and yellow sputum production", "Cyanosis, clubbing, and chronic dyspnea", "Hemoptysis, weight loss, and night sweats", "Wheezing, shortness of breath, and chest pain"],
+                    correct: 0,
+                    explanation: {
+                        title: "Acute Bronchitis",
+                        points: ["Acute bronchitis = inflammation of BRONCHI (airways, not alveoli)", "Usually viral, self-limiting", "Presents with: persistent cough, chest discomfort, sputum production", "Yellow/green sputum = inflammatory cells (not always bacterial)", "Cyanosis/clubbing suggest chronic disease; night sweats suggest TB"],
+                        keyPoint: "Acute bronchitis = airway inflammation = cough with sputum. Usually viral, resolves in 1-3 weeks!"
+                    }
+                },
+                {
+                    id: 63, num: "#16",
+                    question: "Which acute bronchitis treatment encourages coughing up excess mucus?",
+                    options: ["Expectorant", "Antibiotics", "Bronchodilator", "Cough suppressant"],
+                    correct: 0,
+                    explanation: {
+                        title: "Expectorants",
+                        points: ["Expectorants (guaifenesin) LOOSEN mucus for easier expectoration", "Help patient cough up secretions", "Cough suppressants do the OPPOSITE - stop coughing", "Bronchodilators open airways but don't thin mucus", "Antibiotics rarely needed (usually viral)"],
+                        keyPoint: "Expectorant = helps EXPEL mucus. Suppressant = suppresses cough. Know the difference!"
+                    }
+                },
+                {
+                    id: 35, num: "#55",
+                    question: "Which is a characteristic feature of asthma?",
+                    options: ["Reversible airflow obstruction", "Chronic obstructive pulmonary disease", "Persistent cough with sputum production", "Pneumonia"],
+                    correct: 0,
+                    explanation: {
+                        title: "Asthma Characteristics",
+                        points: ["Asthma = REVERSIBLE airway obstruction", "Bronchoconstriction + inflammation + mucus production", "Triggered by allergens, exercise, cold air, etc.", "REVERSIBLE with bronchodilators (key difference from COPD)", "COPD is largely IRREVERSIBLE airflow limitation"],
+                        keyPoint: "Asthma = REVERSIBLE obstruction. COPD = IRREVERSIBLE. This is the key distinguishing feature!"
+                    }
+                },
+                {
+                    id: 36, num: "#54",
+                    question: "Emphysema is characterized by:",
+                    options: ["Loss of elastic recoil in lung tissue", "Decreased air trapping in the lungs", "Increased efficiency of gas exchange", "Narrowing of the airways"],
+                    correct: 0,
+                    explanation: {
+                        title: "Emphysema Pathophysiology",
+                        points: ["Emphysema = destruction of alveolar walls", "Loss of elastic recoil → air gets TRAPPED", "Results in hyperinflation, barrel chest", "DECREASED gas exchange (loss of surface area)", "Part of COPD spectrum (with chronic bronchitis)"],
+                        keyPoint: "Emphysema = alveolar destruction = loss of elastic recoil = air trapping. Think of a stretched-out balloon that won't deflate!"
+                    }
+                },
+                {
+                    id: 32, num: "#59",
+                    question: "On auscultation, which finding suggests a RIGHT pneumothorax?",
+                    options: ["Absence of breath sounds in the right thorax", "Bilateral inspiratory and expiratory crackles", "Inspiratory wheezes in the right thorax", "Bilateral pleural friction rub"],
+                    correct: 0,
+                    explanation: {
+                        title: "Pneumothorax Assessment",
+                        points: ["Pneumothorax = air in pleural space → lung collapse", "ABSENT breath sounds on affected side", "Air doesn't conduct sound like lung tissue does", "Also see: tracheal deviation (tension), hyperresonance", "Bilateral findings suggest bilateral problem, not unilateral pneumothorax"],
+                        keyPoint: "Pneumothorax = no breath sounds on that side! Air in pleural space = collapsed lung = nothing to hear."
+                    }
+                },
+                {
+                    id: 33, num: "#58",
+                    question: "What is the primary underlying mechanism of pleural effusion formation?",
+                    options: ["Increased hydrostatic pressure in the pleural space", "Increased lymphatic drainage", "Decreased membrane permeability", "Decreased oncotic pressure in the pleural space"],
+                    correct: 0,
+                    explanation: {
+                        title: "Pleural Effusion Mechanisms",
+                        points: ["Pleural effusion = fluid accumulation in pleural space", "Increased HYDROSTATIC pressure pushes fluid OUT of vessels", "Also caused by decreased oncotic pressure, increased permeability", "Increased lymphatic drainage would REMOVE fluid, not cause it", "Types: transudative (heart failure) vs exudative (infection, cancer)"],
+                        keyPoint: "Fluid accumulates when: pressure pushes it out (hydrostatic) or can't hold it in (low oncotic) or vessels leak (permeability)."
+                    }
+                }
+            ]
+        },
+        {
+            id: 10,
+            title: "Cancers & Lymphomas",
+            icon: "🔴",
+            description: "Hodgkin lymphoma, CLL, Reed-Sternberg cells",
+            scenario: "You're working in an oncology clinic caring for patients with hematologic malignancies.",
+            questions: [
+                {
+                    id: 11, num: "#41",
+                    question: "Which statements are TRUE regarding Hodgkin Lymphoma? (Select all that apply)",
+                    options: ["Presence of Reed-Sternberg cells indicates Hodgkin Lymphoma", "Males are more at risk than females", "Is a type of cancer that afflicts B cells and T cells", "Prior history of Epstein-Barr virus may play a role"],
+                    correct: [0, 1, 3],
+                    multiSelect: true,
+                    explanation: {
+                        title: "Hodgkin Lymphoma",
+                        points: ["REED-STERNBERG CELLS = hallmark of Hodgkin lymphoma", "These are large, abnormal B cells with 'owl eye' appearance", "Males slightly more affected than females", "EBV infection associated with ~40% of cases", "Hodgkin primarily affects B CELLS (not T cells)"],
+                        keyPoint: "Reed-Sternberg cells = Hodgkin lymphoma! 'Owl eye' cells. EBV connection. Better prognosis than non-Hodgkin."
+                    }
+                },
+                {
+                    id: 47, num: "#40",
+                    question: "A biopsy reveals Reed-Sternberg cells. Which cells give rise to Reed-Sternberg cells?",
+                    options: ["B lymphocytes", "T lymphocytes", "Plasma cells", "Eosinophils"],
+                    correct: 0,
+                    explanation: {
+                        title: "Reed-Sternberg Cell Origin",
+                        points: ["Reed-Sternberg cells originate from B LYMPHOCYTES", "They are abnormal, malignant B cells", "Characteristic 'owl eye' or 'mirror image' nuclei", "Diagnostic for Hodgkin lymphoma", "The background has many inflammatory cells around RS cells"],
+                        keyPoint: "Reed-Sternberg cells = malignant B cells. Finding them = Hodgkin lymphoma diagnosis!"
+                    }
+                },
+                {
+                    id: 46, num: "#42",
+                    question: "Which is a characteristic of Chronic Lymphocytic Leukemia (CLL)?",
+                    options: ["B cells that have failed to differentiate from precursor B cells into mature B cells", "Histology finds multinucleated giant cells", "Invasion of cancerous cells into skin causing diffuse rash", "High bilirubin in bloodstream causing jaundice"],
+                    correct: 0,
+                    explanation: {
+                        title: "Chronic Lymphocytic Leukemia",
+                        points: ["CLL = accumulation of mature-appearing but DYSFUNCTIONAL B cells", "These B cells don't mature properly and can't fight infection", "Most common leukemia in adults in Western countries", "Often discovered incidentally (high lymphocyte count)", "Smudge cells on peripheral smear are characteristic"],
+                        keyPoint: "CLL = B cells stuck in development, accumulating. Often found by accident. Smudge cells on blood smear!"
+                    }
+                },
+                {
+                    id: 12, num: "#48",
+                    question: "A patient can reduce their risk of infective endocarditis by: (Select all that apply)",
+                    options: ["Having proper dental hygiene", "Avoiding use of IV drugs", "Taking a daily multivitamin", "Exercising a minimum of five days per week"],
+                    correct: [0, 1],
+                    multiSelect: true,
+                    explanation: {
+                        title: "Infective Endocarditis Prevention",
+                        points: ["Endocarditis = infection of heart valves", "Bacteria enter bloodstream and colonize damaged valves", "DENTAL hygiene prevents oral bacteria from entering blood", "IV drug use introduces bacteria directly into bloodstream", "Exercise and vitamins don't prevent bacterial seeding"],
+                        keyPoint: "Endocarditis prevention: good dental hygiene + no IV drugs. Bacteria enter through mouth or needles!"
+                    }
+                },
+                {
+                    id: 26, num: "#67",
+                    question: "Match heart disease risk factors with descriptions: High LDL, Physical inactivity, Poor diet, Age",
+                    options: ["High LDL = plaque buildup; Inactivity = sedentary risk; Poor diet = unhealthy fats; Age = older = higher risk"],
+                    correct: 0,
+                    explanation: {
+                        title: "Heart Disease Risk Factors",
+                        points: ["HIGH LDL = 'bad' cholesterol → atherosclerotic plaque buildup", "Physical inactivity = sedentary lifestyle increases CV risk", "Poor diet = saturated/trans fats contribute to atherosclerosis", "Age = older age associated with higher heart disease risk", "Modifiable vs non-modifiable risk factors"],
+                        keyPoint: "LDL = Lousy cholesterol (builds plaque). HDL = Healthy cholesterol (removes it). Know your risk factors!"
+                    }
+                }
+            ]
+        }
+    ]
+};
+
+function init() {
+    renderMenu();
+    updateStats();
+}
+
+function renderMenu() {
+    const menu = document.getElementById('caseMenu');
+    menu.innerHTML = gameData.cases.map(c => {
+        const answered = c.questions.filter(q => gameData.answered.has(q.id)).length;
+        const total = c.questions.length;
+        return `
+            <div class="menu-item" onclick="startCase(${c.id})">
+                <h3>${c.icon} ${c.title}</h3>
+                <p>${c.description}</p>
+                <span class="count">${answered}/${total} completed</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function updateStats() {
+    const total = gameData.cases.reduce((sum, c) => sum + c.questions.length, 0);
+    const answered = gameData.answered.size;
+    const correct = gameData.correct.size;
+    const percent = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+    const progress = Math.round((answered / total) * 100);
+
+    document.getElementById('answeredCount').textContent = answered;
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('scorePercent').textContent = percent + '%';
+    document.getElementById('totalProgress').style.width = progress + '%';
+    document.getElementById('totalProgress').textContent = progress + '%';
+}
+
+function startCase(caseId) {
+    const caseData = gameData.cases.find(c => c.id === caseId);
+    document.getElementById('mainMenu').style.display = 'none';
+    document.getElementById('caseContainer').style.display = 'block';
+    document.querySelector('.back-btn').style.display = 'block';
+    renderCase(caseData);
+}
+
+function showMenu() {
+    document.getElementById('mainMenu').style.display = 'block';
+    document.getElementById('caseContainer').style.display = 'none';
+    document.querySelector('.back-btn').style.display = 'none';
+    renderMenu();
+    updateStats();
+}
+
+function renderCase(caseData) {
+    const container = document.getElementById('caseContainer');
+    container.innerHTML = `
+        <div class="case-header">
+            <h2>${caseData.icon} Case Study: ${caseData.title}</h2>
+        </div>
+        <div class="case-scenario">
+            <h4>Clinical Scenario</h4>
+            <p>${caseData.scenario}</p>
+        </div>
+        <div id="questionsContainer">
+            ${caseData.questions.map((q, idx) => renderQuestion(q, idx)).join('')}
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="showMenu()">Back to Menu</button>
+        </div>
+    `;
+}
+
+function renderQuestion(q, idx) {
+    const isAnswered = gameData.answered.has(q.id);
+    const isMulti = q.multiSelect;
+
+    return `
+        <div class="question-box" id="q-${q.id}">
+            <span class="question-num">Question ${idx + 1} (${q.num})</span>
+            <h4>${q.question}</h4>
+            ${isMulti ? '<p class="multi-select-note">Select all that apply</p>' : ''}
+            <div class="options" id="options-${q.id}">
+                ${q.options.map((opt, i) => `
+                    <div class="option ${isAnswered ? getOptionClass(q, i) : ''}"
+                         onclick="${isAnswered ? '' : (isMulti ? `toggleMulti(${q.id}, ${i})` : `selectAnswer(${q.id}, ${i})`)}"
+                         id="opt-${q.id}-${i}">
+                        ${isMulti ? `<input type="checkbox" class="checkbox" ${isAnswered && Array.isArray(q.selected) && q.selected.includes(i) ? 'checked' : ''} disabled>` : ''}
+                        ${opt}
+                    </div>
+                `).join('')}
+            </div>
+            ${isMulti && !isAnswered ? `<button class="btn btn-primary" style="margin-top:15px" onclick="submitMulti(${q.id})">Submit Answer</button>` : ''}
+            <div class="feedback ${isAnswered ? (q.wasCorrect ? 'correct' : 'incorrect') : ''}" id="feedback-${q.id}" style="${isAnswered ? 'display:block' : ''}">
+                <h4>${isAnswered ? (q.wasCorrect ? 'Correct!' : 'Incorrect') : ''}</h4>
+                ${isAnswered ? renderExplanation(q.explanation) : ''}
+            </div>
+        </div>
+    `;
+}
+
+function getOptionClass(q, i) {
+    if (q.multiSelect) {
+        const isCorrectOption = q.correct.includes(i);
+        const wasSelected = Array.isArray(q.selected) && q.selected.includes(i);
+        if (isCorrectOption) return 'correct';
+        if (wasSelected && !isCorrectOption) return 'incorrect';
+        return '';
+    } else {
+        if (i === q.correct) return 'correct';
+        if (i === q.selected && i !== q.correct) return 'incorrect';
+        return '';
+    }
+}
+
+function renderExplanation(exp) {
+    return `
+        <div class="explanation">
+            <h5>${exp.title}</h5>
+            <ul>${exp.points.map(p => `<li>${p}</li>`).join('')}</ul>
+            <div class="key-point"><strong>Key Point:</strong> ${exp.keyPoint}</div>
+        </div>
+    `;
+}
+
+function selectAnswer(qId, optIdx) {
+    const q = findQuestion(qId);
+    if (!q || gameData.answered.has(qId)) return;
+
+    q.selected = optIdx;
+    q.wasCorrect = optIdx === q.correct;
+    gameData.answered.add(qId);
+    if (q.wasCorrect) gameData.correct.add(qId);
+
+    // Update UI
+    document.querySelectorAll(`#options-${qId} .option`).forEach((opt, i) => {
+        opt.onclick = null;
+        if (i === q.correct) opt.classList.add('correct');
+        else if (i === optIdx) opt.classList.add('incorrect');
+    });
+
+    const feedback = document.getElementById(`feedback-${qId}`);
+    feedback.className = `feedback ${q.wasCorrect ? 'correct' : 'incorrect'}`;
+    feedback.style.display = 'block';
+    feedback.innerHTML = `<h4>${q.wasCorrect ? 'Correct!' : 'Incorrect'}</h4>${renderExplanation(q.explanation)}`;
+
+    updateStats();
+}
+
+function toggleMulti(qId, optIdx) {
+    const opt = document.getElementById(`opt-${qId}-${optIdx}`);
+    const checkbox = opt.querySelector('.checkbox');
+    checkbox.checked = !checkbox.checked;
+    opt.classList.toggle('selected', checkbox.checked);
+}
+
+function submitMulti(qId) {
+    const q = findQuestion(qId);
+    if (!q || gameData.answered.has(qId)) return;
+
+    const selected = [];
+    document.querySelectorAll(`#options-${qId} .checkbox`).forEach((cb, i) => {
+        if (cb.checked) selected.push(i);
+    });
+
+    q.selected = selected;
+    const correctSet = new Set(q.correct);
+    const selectedSet = new Set(selected);
+    q.wasCorrect = correctSet.size === selectedSet.size && [...correctSet].every(x => selectedSet.has(x));
+
+    gameData.answered.add(qId);
+    if (q.wasCorrect) gameData.correct.add(qId);
+
+    // Update UI
+    document.querySelectorAll(`#options-${qId} .option`).forEach((opt, i) => {
+        opt.onclick = null;
+        const cb = opt.querySelector('.checkbox');
+        cb.disabled = true;
+        if (q.correct.includes(i)) opt.classList.add('correct');
+        else if (selected.includes(i)) opt.classList.add('incorrect');
+    });
+
+    document.querySelector(`#q-${qId} .btn-primary`).style.display = 'none';
+
+    const feedback = document.getElementById(`feedback-${qId}`);
+    feedback.className = `feedback ${q.wasCorrect ? 'correct' : 'incorrect'}`;
+    feedback.style.display = 'block';
+    feedback.innerHTML = `<h4>${q.wasCorrect ? 'Correct!' : 'Incorrect'}</h4>${renderExplanation(q.explanation)}`;
+
+    updateStats();
+}
+
+function findQuestion(qId) {
+    for (const c of gameData.cases) {
+        const q = c.questions.find(q => q.id === qId);
+        if (q) return q;
+    }
+    return null;
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
